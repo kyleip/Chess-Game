@@ -12,24 +12,27 @@ pieceSymbols = {
 }
 
 numDict = {
-    '1': 'a',
-    '2': 'b',
-    '3': 'c',
-    '4': 'd',
-    '5': 'e'
+    'a': 1,
+    'b': 2,
+    'c': 3,
+    'd': 4,
+    'e': 5,
+    'f': 6,
+    'g': 7,
+    'h': 8
 }
 
 #board is a grid of the symbols of the pieces in play
 class Board(object):
-    symbolGrid = [[None] * 5 for i in range(5)]
+    symbolGrid = [[None] * 8 for i in range(8)]
     numofTurns = 0
     piecePosList = []
     def __init__(self, p1, p2):
         self.p1 = p1
         self.p2 = p2
 
-        for x in range(0,5):
-            for y in range(0,5):
+        for x in range(0,8):
+            for y in range(0,8):
                 self.symbolGrid[x][y] = ''
 
         for each in self.p1.pieceList:
@@ -50,7 +53,7 @@ class Board(object):
         self.numofTurns += 1
 
     def updateGrid(self, p1, p2):
-        self.symbolGrid = [[''] * 5 for i in range(5)]
+        self.symbolGrid = [[''] * 8 for i in range(8)]
         for each in p1.pieceList:
             x=each.pos[1] - 1
             y=each.pos[0] - 1
@@ -141,6 +144,10 @@ def capture(pos, p1): # tests if a move is a capture or not
 
 
 def collision(piece, posList, p1, p2): # tests if a move involves a piece jumping another piece
+
+    if (isinstance(piece, Knight)):
+        # print('asdfas')
+        return False
 
     if not (isinstance(piece, Bishop) or isinstance(piece, Rook)): # only rooks and bishops can do that
         return False

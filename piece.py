@@ -27,9 +27,9 @@ class Piece(object):
         x = pos[0]
         y = pos[1]
         # print(x, y)
-        if x > 5 or x < 1:
+        if x > 8 or x < 1:
             return False
-        if y > 5 or y < 1:
+        if y > 8 or y < 1:
             return False
         return True
 
@@ -125,7 +125,6 @@ class Bishop(Piece):
                 for j in range(1, 4):
                     res += [(ans[0] + i - 2, ans[1] + j - 2)]
             resList = self.removeTeamPos(res, self.player.piecePosList)
-        resList += self.addSupportingMoves()
         # print(resList)
         return resList
 
@@ -146,6 +145,73 @@ class Bishop(Piece):
             y += 1
         posList += [(x, y)]
         return posList
+
+class Queen(Piece):
+
+    def __init__(self, pos, player):
+        super().__init__(pos, player)
+        if (player.case == 'UPPER'):
+            self.symbol = 'Q'
+        else:
+            self.symbol = 'q'
+
+    def possibleMoves(self):
+        #how to find this!!!
+        posList = []
+        diags = self.diagIntersects()
+        temp = diags[0]
+
+        x = temp[0]
+        y = temp[1]
+        while (self.posInbound( (x, y) )):
+            posList += [(x, y)]
+            x += 1
+            y += 1
+        temp = diags[1]
+        x = temp[0]
+        y = temp[1]
+        while (self.posInbound( (x, y) )):
+            posList += [(x, y)]
+            x += 1
+            y -= 1
+
+        resList = self.removeTeamPos(posList, self.player.piecePosList)
+        if self.isPromoted:
+            ans = list(self.pos)
+            res = posList
+
+            for i in range(1, 4):
+                for j in range(1, 4):
+                    res += [(ans[0] + i - 2, ans[1] + j - 2)]
+            resList = self.removeTeamPos(res, self.player.piecePosList)
+        # print(resList)
+        posList = ([])
+        for i in range(1, 6):
+            posList += [(i, self.pos[1])]
+            posList += [(self.pos[0], i)]
+        resList += posList
+        return resList
+
+    def diagIntersects(self):
+        res = list(self.pos)
+        # print(res)
+        x = res[0]
+        y = res[1]
+        while (x > 1 and y > 1):
+            x -= 1
+            y -= 1
+        posList = [(x, y)]
+
+        x = res[0]
+        y = res[1]
+        while (x > 1 and y < 5):
+            x -= 1
+            y += 1
+        posList += [(x, y)]
+        return posList
+
+
+
 
 class SilverGeneral(Piece):
 
@@ -212,6 +278,50 @@ class GoldenGeneral(Piece):
         resList += self.addSupportingMoves()
         return resList
 
+class Knight(Piece):
+    def __init__(self, pos, player=None):
+        super().__init__(pos, player)
+        if (player.case == 'UPPER'):
+            self.symbol = 'Kn'
+        else:
+            self.symbol = 'kn'
+
+    def possibleMoves(self):
+        ans = list(self.pos)
+        # print(ans)
+        res = []
+        for i in range(1,3):
+            # j = 0;
+            if (i == 1):
+                j = 2
+            else:
+                j = 1
+            res += [((ans[0] + i), (ans[1] + j))]
+            res += [((ans[0] + i), (ans[1] - j))]
+            res += [((ans[0] - i), (ans[1] + j))]
+            res += [((ans[0] - i), (ans[1] - j))]
+
+            # print(res)
+
+        # print(res)
+        for each in res:
+            # print(each)
+            for one in each:
+                # print(one)
+                if (one > 8 or one < 1):
+                    # print('hi', each)
+                    res.remove(each)
+                    break
+        for each in res:
+            # print(each)
+            for one in each:
+                # print(one)
+                if (one > 8 or one < 1):
+                    # print('hi')
+                    res.remove(each)
+                    break
+        resList = self.removeTeamPos(res, self.player.piecePosList)
+        return resList
 class King(Piece):
     def __init__(self, pos, player=None):
         super().__init__(pos, player)

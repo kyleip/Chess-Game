@@ -8,29 +8,48 @@ class Player(object):
         self.capturedPieceList = []
         self.capturedPieceSymbols = []
         if self.case == "UPPER":
-            self.R = Rook((5, 1), self)
-            self.B = Bishop((5, 2), self)
-            self.S = SilverGeneral((5, 3), self)
-            self.G = GoldenGeneral((5, 4), self)
-            self.K = King((5, 5), self)
-            self.P = Pawn((4, 5), self)
-            self.pieceList = [self.R, self.B, self.S, self.G, self.K, self.P]
-            self.piecePosList = [self.R.pos, self.B.pos, self.S.pos, self.G.pos, self.K.pos, self.P.pos]
-            self.promotionZone = []
-            for i in range(1, 6):
-                self.promotionZone += [(1, i)]
+            self.R1 = Rook((8, 1), self)
+            self.R2 = Rook((8, 8), self)
+            self.B1 = Bishop((8, 3), self)
+            self.B2 = Bishop((8, 6), self)
+            self.Q = Queen((8,4), self)
+            self.K = King((8, 5), self)
+            self.Kn1 = Knight((8,2), self)
+            self.Kn2 = Knight((8,7), self)
+            self.P1 = Pawn((7, 8), self)
+            self.P2 = Pawn((7, 7), self)
+            self.P3 = Pawn((7, 6), self)
+            self.P4 = Pawn((7, 5), self)
+            self.P5 = Pawn((7, 4), self)
+            self.P6 = Pawn((7, 3), self)
+            self.P7 = Pawn((7, 2), self)
+            self.P8 = Pawn((7, 1), self)
         else:
-            self.R = Rook((1, 5), self)
-            self.B = Bishop((1, 4), self)
-            self.S = SilverGeneral((1, 3), self)
-            self.G = GoldenGeneral((1, 2), self)
-            self.K = King((1, 1), self)
-            self.P = Pawn((2, 1), self)
-            self.pieceList = [self.R, self.B, self.S, self.G, self.K, self.P]
-            self.piecePosList = [self.R.pos, self.B.pos, self.S.pos, self.G.pos, self.K.pos, self.P.pos]
-            self.promotionZone = []
-            for i in range(1, 6):
-                self.promotionZone += [(5, i)]
+            self.R1 = Rook((1, 1), self)
+            self.R2 = Rook((1, 8), self)
+            self.B1 = Bishop((1, 3), self)
+            self.B2 = Bishop((1, 6), self)
+            self.K = King((1, 5), self)
+            self.Kn1 = Knight((1,2), self)
+            self.Kn2 = Knight((1,7), self)
+            self.Q = Queen((1,4), self)
+            self.P1 = Pawn((2, 8), self)
+            self.P2 = Pawn((2, 7), self)
+            self.P3 = Pawn((2, 6), self)
+            self.P4 = Pawn((2, 5), self)
+            self.P5 = Pawn((2, 4), self)
+            self.P6 = Pawn((2, 3), self)
+            self.P7 = Pawn((2, 2), self)
+            self.P8 = Pawn((2, 1), self)
+
+        self.pieceList = [self.R1, self.R2, self.B1, self.B2, self.K, self.Q, self.P1, self.P2, self.P3, self.P4, self.P5,
+                          self.P6, self.P7, self.P8, self.Kn1, self.Kn2]
+        self.piecePosList = [self.R1.pos, self.R2.pos, self.B1.pos, self.B2.pos, self.K.pos, self.P1.pos, self.P2.pos,
+                             self.P3.pos, self.P4.pos, self.P5.pos, self.P6.pos, self.P7.pos, self.P8.pos, self.Q.pos,
+                             self.Kn1.pos, self.Kn2.pos]
+        self.promotionZone = []
+        # for i in range(1, 6):
+        #     self.promotionZone += [(5, i)]
 
     def getKingPos(self):
         for each in self.pieceList:
@@ -43,7 +62,14 @@ class Player(object):
         del self.S
         del self.G
         del self.K
-        del self.P
+        del self.P1
+        del self.P2
+        del self.P3
+        del self.P4
+        del self.P5
+        del self.P6
+        del self.P7
+        del self.P8
         self.pieceList = []
         self.piecePosList = []
 

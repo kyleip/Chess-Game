@@ -6,7 +6,10 @@ numDict = {
     'b': 2,
     'c': 3,
     'd': 4,
-    'e': 5
+    'e': 5,
+    'f': 6,
+    'g': 7,
+    'h': 8
 }
 
 letterDict = {
@@ -15,7 +18,10 @@ letterDict = {
     '3': 'c',
     '4': 'd',
     '5': 'e',
-    '6': 'f'
+    '6': 'f',
+    '7': 'g',
+    '8': 'h',
+    '9': 'i'
 }
 
 
@@ -26,43 +32,10 @@ def Game(p1, p2, filemoves):
     checkFlag = False
     lastMove = ""
     while True:
-
-        if len(filemoves) == 0:       # if in interactive mode
-            print(lastMove)
-            print(stringifyBoard(b.symbolGrid))
-            if b.isCheck(p1, p2):
-                print('p2 in check')
-                print('Available Moves:')
-                p1.updatePiecePosList()
-                p2.updatePiecePosList()
-                mList = parseAvailableMoves(b.availableMoves(p1, p2))
-                printAvailableMoves(mList)
-            if b.isCheck(p2, p1):
-                print('p1 in check')
-                print('Available Moves:')
-                p1.updatePiecePosList()
-                p2.updatePiecePosList()
-                mList = parseAvailableMoves(b.availableMoves(p2, p1))
-                printAvailableMoves(mList)
-            print(p1.printCapturedPieceList())
-            print(p2.printCapturedPieceList())
-
-            turnString = whoseTurn(numofTurns, p1, p2).case
-            turnString += '> '
-            move = input(turnString)
-            if move == "quit":
-                break
-        else:                       # if in file mode
-            if numofTurns == 400:
-
-                lastMove += ' player action: '
-                lastMove += move
-                printEndGame(b, lastMove, p1, p2, numofTurns, errFlag)
-            elif numofTurns >= len(filemoves):
-                lastMove += ' player action: '
-                lastMove += move
-                printEndGame(b, lastMove, p1, p2, numofTurns, errFlag)
-            move = filemoves[numofTurns]
+        errFlag = False
+        # if len(filemoves) == 0:       # if in interactive mode
+        print(lastMove)
+        print(stringifyBoard(b.symbolGrid))
 
         if numofTurns % 2 == 1:
             lastMove = p1.case
@@ -72,6 +45,49 @@ def Game(p1, p2, filemoves):
             lastMove = p2.case
             attacker = p2
             defender = p1
+
+        if b.isCheck(p1, p2):
+            print('p2 in check')
+            print('Available Moves:')
+            p1.updatePiecePosList()
+            p2.updatePiecePosList()
+            mList = parseAvailableMoves(b.availableMoves(p1, p2))
+            printAvailableMoves(mList)
+        if b.isCheck(p2, p1):
+            print('p1 in check')
+            print('Available Moves:')
+            p1.updatePiecePosList()
+            p2.updatePiecePosList()
+            mList = parseAvailableMoves(b.availableMoves(p2, p1))
+            printAvailableMoves(mList)
+        print(p1.printCapturedPieceList())
+        print(p2.printCapturedPieceList())
+
+        turnString = whoseTurn(numofTurns, attacker, defender).case
+        turnString += '> '
+        move = input(turnString)
+        if move == "quit":
+            break
+        # else:                       # if in file mode
+        #     if numofTurns == 400:
+        #
+        #         lastMove += ' player action: '
+        #         lastMove += move
+        #         printEndGame(b, lastMove, p1, p2, numofTurns, errFlag)
+        #     elif numofTurns >= len(filemoves):
+        #         lastMove += ' player action: '
+        #         lastMove += move
+        #         printEndGame(b, lastMove, p1, p2, numofTurns, errFlag)
+        #     move = filemoves[numofTurns]
+
+        # if numofTurns % 2 == 1:
+        #     lastMove = p1.case
+        #     attacker = p1
+        #     defender = p2
+        # else:
+        #     lastMove = p2.case
+        #     attacker = p2
+        #     defender = p1
 
         if moveIsValid(parseMove(move), attacker, checkFlag, b):    # if the move is valid
             posList = parseMove(move)
@@ -97,6 +113,7 @@ def Game(p1, p2, filemoves):
                 if attacker.pieceList[i].pos == posList[0]:             # finds piece in pos0
                     p = attacker.pieceList[i]
                     if collision(p, posList, attacker, defender):       # if there's a collision (see collision function)
+                        print('hi')
                         errFlag = True
                         break
                     attacker.pieceList[i].pos = posList[1]              # move piece to pos1
@@ -125,17 +142,17 @@ def Game(p1, p2, filemoves):
                         else:
                             errFlag = True
                             break
-                    elif attacker.pieceList[i].pos in attacker.promotionZone \
-                            and isinstance(attacker.pieceList[i], Pawn):
-                        attacker.pieceList[i].promotion()
-                        attacker.updatePiecePosList()
-                        break
-                    elif len(posList) > 2 and not hasattr(attacker.pieceList[i], 'promotion'):
-                        errFlag = True
-                        break
-                    elif len(posList) > 2 and not attacker.pieceList[i].pos in attacker.promotionZone:
-                        errFlag = True
-                        break
+                    # elif attacker.pieceList[i].pos in attacker.promotionZone \
+                    #         and isinstance(attacker.pieceList[i], Pawn):
+                    #     attacker.pieceList[i].promotion()
+                    #     attacker.updatePiecePosList()
+                    #     break
+                    # elif len(posList) > 2 and not hasattr(attacker.pieceList[i], 'promotion'):
+                    #     errFlag = True
+                    #     break
+                    # elif len(posList) > 2 and not attacker.pieceList[i].pos in attacker.promotionZone:
+                    #     errFlag = True
+                    #     break
 
                     if capture(posList[1], defender):                    # if that move is a capture
                         for j in range(len(defender.pieceList)):
@@ -151,13 +168,19 @@ def Game(p1, p2, filemoves):
                 checkFlag = False
 
         else:
+            # print('hello')
             errFlag = True
 
         if errFlag is True:
-            lastMove += ' player action: '
-            lastMove += move
-            printEndGame(b, lastMove, p1, p2, numofTurns, errFlag)
-        if numofTurns % 2 == 1:   # update player
+            # lastMove += ' player action: '
+            # lastMove += move
+            # printEndGame(b, lastMove, p1, p2, numofTurns, errFlag)
+            lastMove = "Invalid Move, try again."
+            numofTurns +=1
+
+        # numofTurns += 1         # increment number of turns
+        print(numofTurns)
+        if numofTurns % 2 == 0:   # update player
             p1 = attacker
             p2 = defender
         else:
@@ -167,7 +190,7 @@ def Game(p1, p2, filemoves):
         b.updatePlayers(p1, p2)
         p1.updatePiecePosList()
         p2.updatePiecePosList()
-        numofTurns += 1           # increment number of turns
+
 
         if b.isCheckmate(p1, p2):
             lastMove += ' player action: '
@@ -207,38 +230,47 @@ def parseMove(move):
 def moveIsValid(posList, player, checkFlag, b):
     if posList[0] == posList[1]:      # can't move piece to its own position
         return False
+
     tempList = []
     for i in range(0, 2):
         tempList += [posList[i]]
     for each in tempList:
+        # print(each)
         x = each[0]
         y = each[1]
         if x == -100:             # if the move is a drop, it will be valid
             return True
-        if x > 6 or x < 0:          # if the move is not on the board
+        if x > 8 or x < 0:          # if the move is not on the board
             return False
-        if y > 6 or y < 0:
+        if y > 8 or y < 0:
             return False
 
     exists = False
     piece = None
+    # print(player.pieceList)
     for each in player.pieceList:   # if the piece is owned by the player
+        # print(each.pos)
         if each.pos == posList[0]:
             piece = each
             exists = True
             break
 
+    # print('23')
+
     if exists is False:
         return False
 
     if posList[1] not in piece.possibleMoves():      # if a piece cannot go there
+        print('456')
         return False
+
+    # print('afjdasldfjas;ldk')
 
     return True
 
 
 def whoseTurn(numofTurns, p1, p2):      # function to return whose turn it is
-    if numofTurns % 2 == 1:
+    if numofTurns % 2 == 0:
         return p1
     else:
         return p2
@@ -319,7 +351,6 @@ def printEndGame(b, lastMove, p1, p2, numofTurns, errFlag):
         turnString += '> '
     print(turnString)
     exit(0)
-
 
 if __name__ == "__main__":
     p1 = Player('UPPER')

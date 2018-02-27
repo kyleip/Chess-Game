@@ -25,7 +25,7 @@ def stringifyBoard(board):
 
         s += os.linesep
 
-    s += '    a  b  c  d  e' + os.linesep
+    s += '    a  b  c  d  e  f  g  h' + os.linesep
 
     return s
 
